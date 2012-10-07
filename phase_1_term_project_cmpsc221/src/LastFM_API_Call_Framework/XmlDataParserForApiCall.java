@@ -42,11 +42,13 @@ public class XmlDataParserForApiCall
         InputSource xmlDataStream;                                      // A data stream from the resource at xmlDocumentLocation
         xmlDataStream = new InputSource(xmlDocumentLocation.openStream());
 
-        
+        System.out.print("\nXML content retrieved from source.");
         dataParser.setContentHandler(documentHandler);                  // Set the local event handler as the event handler for events
                                                                         //   reported by dataParser (our XML reader)
+        System.out.print("\nEvent Handler associated with XML Reader.");
+        System.out.print("\nStarting XML parser ...");
         dataParser.parse(xmlDataStream);                                // Execute a read of the data in the input stream
         
-        return documentHandler.getParsedTracks();
+        return documentHandler.getParsedTracks();                       // Return the array of Tracks from the handler
     }
 }

@@ -56,9 +56,9 @@ public class LastFmApiMethodCall {
     }
     
     public String toString() {
-        return ("Method Name: " + lastFmApiMethod
-              + "Track Limit: " + trackLimit
-              + "API Key: " + API_KEY
-              + "URL:" + getUrlString()); 
+        return ("\nMethod Name: " + lastFmApiMethod
+              + "\nTrack Limit: " + trackLimit
+              + "\nAPI Key: " + API_KEY
+              + "\nURL:" + getUrlString()); 
     }
 }
