@@ -26,7 +26,7 @@ public class LastFmXmlHandler extends DefaultHandler
     private int numberOfTracksInDocument;                 // The total number of tracks in the document.
     private Track[] arrayOfParsedTracks;                  // An array of Tracks. Space for the array is dynamically allocated
                                                           //   whenever the handler opens a new document or input stream.
-    public int numberOfTracksParsed;                 // A count of Tracks parsed from the XML document.
+    private int numberOfTracksParsed = 0;                 // A count of Tracks parsed from the XML document.
                                                           //   The count increments each time a Track's information is fully parsed
                                                           //   from the document.
     private boolean parserIsInArtistElementBlock = false; // Indicates whether the Document Handler is within an Artist
@@ -52,11 +52,15 @@ public class LastFmXmlHandler extends DefaultHandler
     // @throws SAXException any exceptions encountered by the XML parser
     public void startDocument() throws SAXException
     {
-        System.out.print("\nStart of document");
-        System.out.print("\nAllocating space for new tracks ... ");
+        System.out.print("\nParser reached start of XML document");
+        System.out.print("\nAllocating space for new data ... ");
         arrayOfParsedTracks = new Track[numberOfTracksInDocument];
         System.out.print("DONE.");
-        numberOfTracksParsed = 0;
+    }
+    
+    public void endDocument() throws SAXException
+    {
+        System.out.print("\nParser reached end of document, " + getNumberOfTracksParsed() + " new items created.");
         
     }
     
@@ -77,18 +81,13 @@ public class LastFmXmlHandler extends DefaultHandler
     {
         if (tagName.equalsIgnoreCase("TRACK"))
         {
-            System.out.print("\nStart of track " + (numberOfTracksParsed+1));
-            arrayOfParsedTracks[numberOfTracksParsed] = new Track();
-            System.out.print("\nSetting chart rank on Track ");
+            arrayOfParsedTracks[numberOfTracksParsed] = new Track();                          // Dynamically allocate space for the new Track on the array
             arrayOfParsedTracks[numberOfTracksParsed].setChartRank(numberOfTracksParsed + 1); // The start of a Track element indicates a new track
                                                                                               // in the document, whose chart rank must be 1 greater
                                                                                               // than the number of tracks already parsed by the handler
-            System.out.print(arrayOfParsedTracks[numberOfTracksParsed].getChartRank());
-            System.out.print(" ... DONE.");
         }
         else if (tagName.equalsIgnoreCase("NAME"))
         {
-            System.out.print("\nStart of Name element for track " + (numberOfTracksParsed+1));
             storeParsedData = true;              // Character data within Name Elements is the only useful information
                                                  // so we indicate that the data within the open Element should be stored
                                                  // on the active Track
@@ -96,7 +95,6 @@ public class LastFmXmlHandler extends DefaultHandler
             
         if (tagName.equalsIgnoreCase("ARTIST"))
         {
-            System.out.print("\nStart of Artist Element for track " + (numberOfTracksParsed+1));
             parserIsInArtistElementBlock = true; // The start of an Artist Element indicates that all information
                                                  // parsed (until the Element closes) is relevant to the artist of the track.
         }
@@ -116,7 +114,7 @@ public class LastFmXmlHandler extends DefaultHandler
     {
         if (tagName.equalsIgnoreCase("TRACK"))
         {
-            numberOfTracksParsed++; // A Track Element has closed, so we increment the number of tracks parsed.
+            incrementNumberOfTracksParsed(); // A Track Element has closed, so we increment the number of tracks parsed.
         }
         else if (tagName.equalsIgnoreCase("NAME"))
         {
@@ -145,15 +143,26 @@ public class LastFmXmlHandler extends DefaultHandler
         if (storeParsedData && !parserIsInArtistElementBlock)
         {
             String trackName = new String(characters, startIndex, lengthOfString);
-            System.out.print("\n" + trackName);
             arrayOfParsedTracks[numberOfTracksParsed].setTrackName(trackName);
         }
         else if (storeParsedData && parserIsInArtistElementBlock)
         {
             String artistName = new String(characters, startIndex, lengthOfString);
-            System.out.print("\n"+artistName);
             arrayOfParsedTracks[numberOfTracksParsed].setArtist(artistName);
         }
+    }
+    
+    // Adds 1 to the total number of tracks parsed.
+    protected void incrementNumberOfTracksParsed()
+    {
+        // POST: numberOfTracksParsed == numberOfTracksParsed + 1
+        numberOfTracksParsed++;
+    }
+    
+    // Returns the current total number of tracks parsed by the reader
+    public int getNumberOfTracksParsed()
+    {
+        return numberOfTracksParsed;
     }
     
     // Returns the tracks parsed from the XML document
@@ -161,7 +170,7 @@ public class LastFmXmlHandler extends DefaultHandler
     // @return arrayOfParsedTracks the tracks parsed from the XML document
     public Track[] getParsedTracks()
     {
-        System.out.print("\nAttempting to return array of parsed tracks ... ");
+        System.out.print("\nReturning parsed data from handler ... ");
         return arrayOfParsedTracks;
     }
 }
