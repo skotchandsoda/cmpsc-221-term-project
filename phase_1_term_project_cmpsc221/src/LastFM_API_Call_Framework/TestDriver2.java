@@ -5,11 +5,11 @@
 
 package LastFM_API_Call_Framework;
 
-public class TestDriver1 
+public class TestDriver2
 {
     public static void main (String[] args)
     {
-        LastFmApiMethodCall apiCall = new LastFmApiMethodCall("chart.getTopTracks", 50);   // A test API call
+        LastFmApiMethodCall apiCall = new LastFmApiMethodCall("chart.getHypedTracks", 107);// A test API call
         Track[] tracksFromCall = new Track[apiCall.getTrackLimit()];                       // An array for storing the data parsed from the API call
         XmlDataParserForApiCall parser = new XmlDataParserForApiCall();                    // An instance of a SAX parser for the XML retrieve from the API call
         
