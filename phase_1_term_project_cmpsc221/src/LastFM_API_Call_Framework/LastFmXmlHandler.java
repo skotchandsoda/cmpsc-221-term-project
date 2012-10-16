@@ -88,9 +88,9 @@ public class LastFmXmlHandler extends DefaultHandler
         }
         else if (tagName.equalsIgnoreCase("NAME"))
         {
-            storeParsedData = true;              // Character data within Name Elements is the only useful information
-                                                 // so we indicate that the data within the open Element should be stored
-                                                 // on the active Track
+            storeParsedData = true; // We only keep data from Name Elements,
+                                    // so we indicate that the data within the open Name Element 
+                                    // should be stored on the active Track
         }
             
         if (tagName.equalsIgnoreCase("ARTIST"))
@@ -136,7 +136,7 @@ public class LastFmXmlHandler extends DefaultHandler
     // @param characters the character data the parser has retrieved from the document
     // @param startIndex the index where the relevant character data begins
     // @param lengthOfString the length of the string of characters parsed from this
-    //                       section of the document
+    //                        section of the document
     // @throws SAXException any exceptions encountered by the XML parser
     public void characters(char[] characters, int startIndex, int lengthOfString) throws SAXException
     {
@@ -152,10 +152,10 @@ public class LastFmXmlHandler extends DefaultHandler
         }
     }
     
-    // Adds 1 to the total number of tracks parsed.
+    // Adds 1 to the total number of tracks parsed, indicating that a new track 
+    // has been parsed completely
     protected void incrementNumberOfTracksParsed()
     {
-        // POST: numberOfTracksParsed == numberOfTracksParsed + 1
         numberOfTracksParsed++;
     }
     
