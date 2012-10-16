@@ -36,7 +36,7 @@ public class XmlDataParserForApiCall
     public Track[] getTracksFromCall(LastFmApiMethodCall apiCall) throws Exception
     {
         URL xmlDocumentLocation = apiCall.getUrl();                     // A URL pointing to the XML resource we want to parse
-        XMLReader dataParser = XMLReaderFactory.createXMLReader();          // The SAX reader for the XML resource at xmlDocumentLocation
+        XMLReader dataParser = XMLReaderFactory.createXMLReader();      // The SAX reader for the XML resource at xmlDocumentLocation
         LastFmXmlHandler documentHandler;                               // A Handler for events reported by the XMLReader during its run
         documentHandler = new LastFmXmlHandler(apiCall.getTrackLimit());
         InputSource xmlDataStream;                                      // A data stream from the resource at xmlDocumentLocation
